@@ -12,7 +12,10 @@ import UIKit
 // 1
 protocol SettingsViewControllerDelegate: class {
     func changeBackGroundImage(image: UIImage, owner: SettingsViewController)
+    //1.1
+    func changeSelectedSegmentIndex(owner: SettingsViewController)
 }
+
 
 class SettingsViewController: UIViewController {
     
@@ -28,8 +31,19 @@ class SettingsViewController: UIViewController {
         
         self.title = "Setting"
         backgroundImageView.image = currentImage
+        
+        view.insertSubview(backgroundImageView, atIndex: 0)
+        backgroundImageView.alpha = 0.5
+        UIView.animateWithDuration(1.5, animations: {
+            self.backgroundImageView.alpha = 1
+        })
+
     }
     
+    @IBAction func changeSelectedSegmentIndex(sender: UIButton) {
+        //3.1
+        self.delegate?.changeSelectedSegmentIndex(self)
+    }
     
     @IBAction func changeBackgroundAction(sender: UIButton) {
         if currentImage == UIImage(named: "background") {

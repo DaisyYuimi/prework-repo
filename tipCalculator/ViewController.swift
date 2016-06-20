@@ -19,17 +19,48 @@ class ViewController: UIViewController {
     @IBOutlet weak var tipFirstLabel: UILabel!
     
     @IBOutlet weak var tipControl: UISegmentedControl!
+    var selectedSegmentIndex: Int = 0
     
     var backgroundImageView: UIImageView!
+    
+    
+    //MARK: - System methods
     
     override func viewDidLoad() {
         super.viewDidLoad()
         backgroundImageView = UIImageView(frame: view.bounds)
         backgroundImageView.image = UIImage(named: "background")
         view.insertSubview(backgroundImageView, atIndex: 0)
-
+        
+        tipControl.selectedSegmentIndex = 0
+        selectedSegmentIndex = 0
+        
     }
 
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        backgroundImageView.alpha = 0.5
+        UIView.animateWithDuration(1.5, animations: {
+            self.backgroundImageView.alpha = 1
+        })
+        print("view will appear")
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        print("view did appear")
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        print("view will disappear")
+    }
+    
+    override func viewDidDisappear(animated: Bool) {
+        super.viewDidDisappear(animated)
+        print("view did disappear")
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         
@@ -41,8 +72,9 @@ class ViewController: UIViewController {
     
     @IBAction func enterBillAmount(sender: AnyObject) {
         var tipPercentages = [0.3, 0.25, 0.2, 0.15]
-        var tipPercentage = tipPercentages[tipControl.selectedSegmentIndex]
-        var whenSegmentIs:Int = tipControl.selectedSegmentIndex
+        let tipPercentage = tipPercentages[tipControl.selectedSegmentIndex]
+        let whenSegmentIs:Int = tipControl.selectedSegmentIndex
+        selectedSegmentIndex = whenSegmentIs
 
         switch whenSegmentIs {
         case 0:
@@ -57,9 +89,9 @@ class ViewController: UIViewController {
             tipFirstLabel.text = "30%"
         }
         
-        var billAmount = NSString(string: billField.text!).doubleValue
-        var tipAmount = billAmount * tipPercentage
-        var totalAmount = billAmount + tipAmount
+        let billAmount = NSString(string: billField.text!).doubleValue
+        let tipAmount = billAmount * tipPercentage
+        let totalAmount = billAmount + tipAmount
         
     tipLabel.text = "$\(tipAmount)"
     totalLabel.text = "$\(totalAmount)"
@@ -79,13 +111,31 @@ class ViewController: UIViewController {
     @IBAction func dismissKeyboard(sender: AnyObject) {
         view.endEditing(true)
     }
+    
+    
+    //MARK: - Private methods
+    
+    func changeSelectedSegmentIndex() {
+        selectedSegmentIndex += 1
+        if selectedSegmentIndex > 3 {
+            selectedSegmentIndex = 0
+        }
+        tipControl.selectedSegmentIndex = selectedSegmentIndex
+        
+    }
 }
 
-// 5
+
+//MARK: - SettingsViewControllerDelegate methods
 
 extension ViewController: SettingsViewControllerDelegate {
     func changeBackGroundImage(image: UIImage, owner: SettingsViewController) {
         self.backgroundImageView.image = image
+    }
+    //5.1
+    func changeSelectedSegmentIndex(owner: SettingsViewController) {
+        changeSelectedSegmentIndex()
+        enterBillAmount(tipControl)
     }
 }
 
