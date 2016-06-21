@@ -18,6 +18,8 @@ class ViewController: UIViewController {
 
     @IBOutlet weak var tipFirstLabel: UILabel!
     
+    weak var settingsViewController: SettingsViewController!
+    
     @IBOutlet weak var tipControl: UISegmentedControl!
     var selectedSegmentIndex: Int = 0
     
@@ -34,7 +36,7 @@ class ViewController: UIViewController {
         
         tipControl.selectedSegmentIndex = 0
         selectedSegmentIndex = 0
-        
+        billField.becomeFirstResponder()
     }
 
     override func viewWillAppear(animated: Bool) {
@@ -101,9 +103,10 @@ class ViewController: UIViewController {
     // 4
 
     @IBAction func pushToSettingsViewControllerAction(sender: UIBarButtonItem) {
-        let settingsViewController = self.storyboard?.instantiateViewControllerWithIdentifier("SettingsViewController") as! SettingsViewController
+        settingsViewController = self.storyboard?.instantiateViewControllerWithIdentifier("SettingsViewController") as! SettingsViewController
         settingsViewController.currentImage = backgroundImageView.image
         settingsViewController.delegate = self
+        settingsViewController.tipValue = tipFirstLabel.text!
         
         navigationController?.pushViewController(settingsViewController, animated: true)
     }
@@ -136,6 +139,10 @@ extension ViewController: SettingsViewControllerDelegate {
     func changeSelectedSegmentIndex(owner: SettingsViewController) {
         changeSelectedSegmentIndex()
         enterBillAmount(tipControl)
+        
+        if settingsViewController != nil {
+            settingsViewController.tipLabel.text = tipFirstLabel.text
+        }
     }
 }
 

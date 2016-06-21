@@ -19,7 +19,9 @@ protocol SettingsViewControllerDelegate: class {
 
 class SettingsViewController: UIViewController {
     
+    var tipValue: String = ""
     
+    @IBOutlet weak var tipLabel: UILabel!
     @IBOutlet weak var backgroundImageView: UIImageView!
     var currentImage: UIImage?
     
@@ -29,7 +31,7 @@ class SettingsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.title = "Setting"
+        self.title = "Settings"
         backgroundImageView.image = currentImage
         
         view.insertSubview(backgroundImageView, atIndex: 0)
@@ -37,7 +39,7 @@ class SettingsViewController: UIViewController {
         UIView.animateWithDuration(1.5, animations: {
             self.backgroundImageView.alpha = 1
         })
-
+        tipLabel.text = tipValue
     }
     
     @IBAction func changeSelectedSegmentIndex(sender: UIButton) {
