@@ -25,6 +25,7 @@ class ViewController: UIViewController {
     
     var backgroundImageView: UIImageView!
     
+    let defaults = NSUserDefaults.standardUserDefaults()
     
     //MARK: - System methods
     
@@ -37,6 +38,8 @@ class ViewController: UIViewController {
         tipControl.selectedSegmentIndex = 0
         selectedSegmentIndex = 0
         billField.becomeFirstResponder()
+        
+        billField.text = defaults.stringForKey("kBill")
     }
 
     override func viewWillAppear(animated: Bool) {
@@ -73,6 +76,10 @@ class ViewController: UIViewController {
     //MARK: - IBAction methods
     
     @IBAction func enterBillAmount(sender: AnyObject) {
+       
+        defaults.setObject(billField.text, forKey: "kBill")
+        defaults.synchronize()
+        
         var tipPercentages = [0.3, 0.25, 0.2, 0.15]
         let tipPercentage = tipPercentages[tipControl.selectedSegmentIndex]
         let whenSegmentIs:Int = tipControl.selectedSegmentIndex
@@ -97,7 +104,6 @@ class ViewController: UIViewController {
         
     tipLabel.text = "$\(tipAmount)"
     totalLabel.text = "$\(totalAmount)"
-  
     }
     
     // 4
