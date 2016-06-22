@@ -38,8 +38,9 @@ class ViewController: UIViewController {
         tipControl.selectedSegmentIndex = 0
         selectedSegmentIndex = 0
         billField.becomeFirstResponder()
-        
+        if defaults.stringForKey("kBill") != nil {
         billField.text = defaults.stringForKey("kBill")
+        }
     }
 
     override func viewWillAppear(animated: Bool) {
